@@ -21,6 +21,13 @@ import { NavLink } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
+type NavigationItem = {
+  label: string;
+  href: string;
+  icon: typeof Home;
+  comingSoon?: boolean;
+};
+
 type AppSidebarProps = {
   collapsed: boolean;
   onCollapsedChange: (collapsed: boolean) => void;
@@ -28,7 +35,7 @@ type AppSidebarProps = {
   onMobileOpenChange: (open: boolean) => void;
 };
 
-const learnNavigation = [
+const learnNavigation: NavigationItem[] = [
   {
     label: "Home",
     href: "/home",
@@ -68,7 +75,7 @@ const learnNavigation = [
   },
 ];
 
-const activityNavigation = [
+const activityNavigation: NavigationItem[] = [
   {
     label: "Progress",
     href: "/progress",
@@ -86,7 +93,7 @@ const activityNavigation = [
   },
 ];
 
-const quickNavigation = [
+const quickNavigation: NavigationItem[] = [
   {
     label: "Continue Learning",
     href: "/my-learning",
@@ -99,34 +106,31 @@ const quickNavigation = [
   },
 ];
 
-export default function AppSidebar({
+function SidebarNavigation({
+  items,
   collapsed,
-  onCollapsedChange,
-  mobileOpen,
-  onMobileOpenChange,
-}: AppSidebarProps) {
-  const closeMobile = () => onMobileOpenChange(false);
-
-  const renderNavigation = (
-    items:
-      | typeof learnNavigation
-      | typeof activityNavigation
-      | typeof quickNavigation,
-  ) => {
-    return (
+  onNavigate,
+}: {
+  items: NavigationItem[];
+  collapsed: boolean;
+  onNavigate: () => void;
+}) {
+  return (
+    <nav aria-label="Navigation">
       <div className="space-y-1">
         {items.map((item) => {
           const Icon = item.icon;
 
           return (
             <NavLink
-              key={item.label}
+              key={item.href}
               to={item.href}
-              onClick={closeMobile}
+              onClick={onNavigate}
               title={collapsed ? item.label : undefined}
               className={({ isActive }) =>
                 [
                   "group flex h-10 items-center rounded-xl text-sm transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   collapsed ? "justify-center px-0" : "gap-3 px-3",
                   isActive
                     ? "bg-muted text-foreground"
@@ -134,13 +138,13 @@ export default function AppSidebar({
                 ].join(" ")
               }
             >
-              <Icon className="size-4.5 shrink-0" />
+              <Icon className="size-4.5 shrink-0" aria-hidden="true" />
 
               {!collapsed && (
                 <>
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
 
-                  {"comingSoon" in item && item.comingSoon && (
+                  {item.comingSoon && (
                     <span className="shrink-0 rounded-full border bg-muted/60 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wide text-muted-foreground">
                       Soon
                     </span>
@@ -151,8 +155,17 @@ export default function AppSidebar({
           );
         })}
       </div>
-    );
-  };
+    </nav>
+  );
+}
+
+export default function AppSidebar({
+  collapsed,
+  onCollapsedChange,
+  mobileOpen,
+  onMobileOpenChange,
+}: AppSidebarProps) {
+  const closeMobile = () => onMobileOpenChange(false);
 
   return (
     <>
@@ -161,6 +174,7 @@ export default function AppSidebar({
         <motion.button
           type="button"
           aria-label="Close navigation"
+          aria-controls="app-navigation"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -170,6 +184,8 @@ export default function AppSidebar({
       )}
 
       <motion.aside
+        id="app-navigation"
+        aria-label="Main navigation"
         initial={false}
         animate={{
           width: collapsed ? 72 : 248,
@@ -199,10 +215,10 @@ export default function AppSidebar({
               variant="ghost"
               size="icon"
               onClick={() => onCollapsedChange(false)}
-              className="size-10 rounded-xl"
+              className="size-10 rounded-xl focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Expand sidebar"
             >
-              <Menu className="size-5" />
+              <Menu className="size-5" aria-hidden="true" />
             </Button>
           ) : (
             <div className="flex w-full items-center justify-between">
@@ -212,19 +228,24 @@ export default function AppSidebar({
                   variant="ghost"
                   size="icon"
                   onClick={() => onCollapsedChange(true)}
-                  className="size-10 shrink-0 rounded-xl"
+                  className="size-10 shrink-0 rounded-xl focus-visible:ring-2 focus-visible:ring-ring"
                   aria-label="Collapse sidebar"
                 >
-                  <Menu className="size-5" />
+                  <Menu className="size-5" aria-hidden="true" />
                 </Button>
 
                 <NavLink
                   to="/home"
                   onClick={closeMobile}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label="Go to Learn_ home"
                 >
                   <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border bg-muted/40">
-                    <BookOpen className="size-4.5" strokeWidth={1.8} />
+                    <BookOpen
+                      className="size-4.5"
+                      strokeWidth={1.8}
+                      aria-hidden="true"
+                    />
                   </span>
 
                   <span className="text-base font-semibold tracking-tight">
@@ -238,10 +259,10 @@ export default function AppSidebar({
                 variant="ghost"
                 size="icon"
                 onClick={closeMobile}
-                className="size-9 rounded-lg lg:hidden"
+                className="size-9 rounded-lg focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
                 aria-label="Close sidebar"
               >
-                <X className="size-5" />
+                <X className="size-5" aria-hidden="true" />
               </Button>
             </div>
           )}
@@ -257,7 +278,11 @@ export default function AppSidebar({
               </p>
             )}
 
-            {renderNavigation(learnNavigation)}
+            <SidebarNavigation
+              items={learnNavigation}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
           </div>
 
           {/* Activity */}
@@ -268,7 +293,11 @@ export default function AppSidebar({
               </p>
             )}
 
-            {renderNavigation(activityNavigation)}
+            <SidebarNavigation
+              items={activityNavigation}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
           </div>
 
           {/* Quick Access */}
@@ -279,7 +308,11 @@ export default function AppSidebar({
               </p>
             )}
 
-            {renderNavigation(quickNavigation)}
+            <SidebarNavigation
+              items={quickNavigation}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
           </div>
 
           {/* Weekly goal */}
@@ -300,7 +333,10 @@ export default function AppSidebar({
                     </p>
                   </div>
 
-                  <Target className="size-4 text-muted-foreground" />
+                  <Target
+                    className="size-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 </div>
 
                 <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-muted">
@@ -329,11 +365,18 @@ export default function AppSidebar({
             <div className="mt-auto flex justify-center pt-8">
               <div
                 title="Weekly goal: 68%"
+                aria-label="Weekly goal: 68%"
                 className="relative flex size-10 items-center justify-center rounded-xl bg-muted/50"
               >
-                <Target className="size-4.5 text-muted-foreground" />
+                <Target
+                  className="size-4.5 text-muted-foreground"
+                  aria-hidden="true"
+                />
 
-                <span className="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-foreground" />
+                <span
+                  className="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-foreground"
+                  aria-hidden="true"
+                />
               </div>
             </div>
           )}
@@ -348,6 +391,7 @@ export default function AppSidebar({
             className={({ isActive }) =>
               [
                 "flex h-10 items-center rounded-xl text-sm transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 collapsed ? "justify-center px-0" : "gap-3 px-3",
                 isActive
                   ? "bg-muted text-foreground"
@@ -355,7 +399,7 @@ export default function AppSidebar({
               ].join(" ")
             }
           >
-            <Settings className="size-4.5 shrink-0" />
+            <Settings className="size-4.5 shrink-0" aria-hidden="true" />
 
             {!collapsed && <span>Settings</span>}
           </NavLink>

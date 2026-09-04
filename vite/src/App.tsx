@@ -1,160 +1,178 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import AppShell from "@/components/layout/app-shell";
 
-import ForgotPasswordPage from "@/pages/auth/forgot-password";
-import LoginPage from "@/pages/auth/login";
-import RegisterPage from "@/pages/auth/register";
-import ResetPasswordPage from "@/pages/auth/reset-password";
+// Public
+const LandingPage = lazy(() => import("@/pages/public/home"));
 
-import LandingPage from "@/pages/public/home";
+// Auth
+const ForgotPasswordPage = lazy(() => import("@/pages/auth/forgot-password"));
+const LoginPage = lazy(() => import("@/pages/auth/login"));
+const RegisterPage = lazy(() => import("@/pages/auth/register"));
+const ResetPasswordPage = lazy(() => import("@/pages/auth/reset-password"));
 
-import AiQuizPage from "@/pages/student/ai-quiz";
-import AiTutorPage from "@/pages/student/ai-tutor";
-import StudentDashboard from "@/pages/student/dashboard";
-import ExplorePage from "@/pages/student/explore";
-import LearningGoalsPage from "@/pages/student/goals";
-import HistoryPage from "@/pages/student/history";
-import HomePage from "@/pages/student/home";
-import LearningPathPage from "@/pages/student/learning-path";
-import MyLearningPage from "@/pages/student/my-learning";
-import ProgressPage from "@/pages/student/progress";
-import SettingsPage from "@/pages/student/settings";
-import VideoPlayerPage from "@/pages/student/video-player";
-import BookmarksPage from "./pages/student/bookmarks";
+// Student
+const AiQuizPage = lazy(() => import("@/pages/student/ai-quiz"));
+const AiTutorPage = lazy(() => import("@/pages/student/ai-tutor"));
+const BookmarksPage = lazy(() => import("@/pages/student/bookmarks"));
+const StudentDashboard = lazy(() => import("@/pages/student/dashboard"));
+const ExplorePage = lazy(() => import("@/pages/student/explore"));
+const LearningGoalsPage = lazy(() => import("@/pages/student/goals"));
+const HistoryPage = lazy(() => import("@/pages/student/history"));
+const HomePage = lazy(() => import("@/pages/student/home"));
+const LearningPathPage = lazy(() => import("@/pages/student/learning-path"));
+const MyLearningPage = lazy(() => import("@/pages/student/my-learning"));
+const ProgressPage = lazy(() => import("@/pages/student/progress"));
+const SettingsPage = lazy(() => import("@/pages/student/settings"));
+const VideoPlayerPage = lazy(() => import("@/pages/student/video-player"));
+
+function RouteFallback() {
+  return (
+    <div className="flex min-h-full items-center justify-center bg-background px-4">
+      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+        <span className="size-4 animate-spin rounded-full border-2 border-muted-foreground/30 border-t-foreground" />
+        Loading...
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <Routes>
-      {/* Public */}
-      <Route path="/" element={<LandingPage />} />
+    <Suspense fallback={<RouteFallback />}>
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<LandingPage />} />
 
-      {/* Auth */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+        {/* Auth */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      {/* Student */}
-      <Route
-        path="/home"
-        element={
-          <AppShell>
-            <HomePage />
-          </AppShell>
-        }
-      />
+        {/* Student */}
+        <Route
+          path="/home"
+          element={
+            <AppShell>
+              <HomePage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/dashboard"
-        element={
-          <AppShell>
-            <StudentDashboard />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/dashboard"
+          element={
+            <AppShell>
+              <StudentDashboard />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/explore"
-        element={
-          <AppShell>
-            <ExplorePage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/explore"
+          element={
+            <AppShell>
+              <ExplorePage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/my-learning"
-        element={
-          <AppShell>
-            <MyLearningPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/my-learning"
+          element={
+            <AppShell>
+              <MyLearningPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/goals"
-        element={
-          <AppShell>
-            <LearningGoalsPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/goals"
+          element={
+            <AppShell>
+              <LearningGoalsPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/progress"
-        element={
-          <AppShell>
-            <ProgressPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/progress"
+          element={
+            <AppShell>
+              <ProgressPage />
+            </AppShell>
+          }
+        />
 
-      {/* Temporary placeholders */}
-      <Route
-        path="/history"
-        element={
-          <AppShell>
-            <HistoryPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/history"
+          element={
+            <AppShell>
+              <HistoryPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/bookmarks"
-        element={
-          <AppShell>
-            <BookmarksPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/bookmarks"
+          element={
+            <AppShell>
+              <BookmarksPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/settings"
-        element={
-          <AppShell>
-            <SettingsPage />
-          </AppShell>
-        }
-      />
-      <Route
-        path="/video-player"
-        element={
-          <AppShell>
-            <VideoPlayerPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/settings"
+          element={
+            <AppShell>
+              <SettingsPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/learning-path"
-        element={
-          <AppShell>
-            <LearningPathPage />
-          </AppShell>
-        }
-      />
-      <Route
-        path="/ai-tutor"
-        element={
-          <AppShell>
-            <AiTutorPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/video-player"
+          element={
+            <AppShell>
+              <VideoPlayerPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="/ai-quiz"
-        element={
-          <AppShell>
-            <AiQuizPage />
-          </AppShell>
-        }
-      />
+        <Route
+          path="/learning-path"
+          element={
+            <AppShell>
+              <LearningPathPage />
+            </AppShell>
+          }
+        />
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route
+          path="/ai-tutor"
+          element={
+            <AppShell>
+              <AiTutorPage />
+            </AppShell>
+          }
+        />
+
+        <Route
+          path="/ai-quiz"
+          element={
+            <AppShell>
+              <AiQuizPage />
+            </AppShell>
+          }
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
   );
 }
 

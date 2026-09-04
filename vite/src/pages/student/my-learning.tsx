@@ -9,6 +9,9 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import PageContainer from "@/components/shared/page-container";
+import ProgressBar from "@/components/shared/progress-bar";
+import SectionHeader from "@/components/shared/section-header";
 import { Input } from "@/components/ui/input";
 
 const activePaths = [
@@ -73,111 +76,113 @@ const completedPaths = [
 
 export default function MyLearningPage() {
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-375 px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-        {/* Header */}
-        <motion.section
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-8"
-        >
-          <p className="text-sm text-muted-foreground">Your library</p>
+    <PageContainer className="max-w-375">
+      {/* Header */}
+      <motion.section
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="mb-8"
+      >
+        <p className="text-sm text-muted-foreground">Your library</p>
 
-          <div className="mt-1 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                My Learning
-              </h1>
+        <div className="mt-1 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              My Learning
+            </h1>
 
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
-                Continue your learning paths and keep building your skills.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <BookOpen className="size-3.5" />
-              {activePaths.length} active paths
-            </div>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              Continue your learning paths and keep building your skills.
+            </p>
           </div>
-        </motion.section>
 
-        {/* Overview */}
-        <section className="mb-8 grid gap-4 sm:grid-cols-3">
-          <OverviewCard
-            icon={BookOpen}
-            label="Active paths"
-            value="4"
-            detail="Currently learning"
-            index={0}
-          />
-
-          <OverviewCard
-            icon={TrendingUp}
-            label="Average progress"
-            value="41%"
-            detail="Across active paths"
-            index={1}
-          />
-
-          <OverviewCard
-            icon={CheckCircle2}
-            label="Completed"
-            value="2"
-            detail="Finished learning paths"
-            index={2}
-          />
-        </section>
-
-        {/* Search */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.05 }}
-          className="mb-10"
-        >
-          <div className="relative w-full max-w-xl">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-
-            <Input
-              type="search"
-              placeholder="Search your learning..."
-              className="h-11 rounded-xl border bg-muted/20 pl-10 pr-4 shadow-none transition-colors focus-visible:bg-background"
-            />
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <BookOpen className="size-3.5" aria-hidden="true" />
+            {activePaths.length} active paths
           </div>
-        </motion.div>
+        </div>
+      </motion.section>
 
-        {/* Continue Learning */}
-        <section className="mb-14">
-          <SectionHeader
-            title="Continue learning"
-            description="Pick up where you left off."
-            count={`${activePaths.length} paths`}
+      {/* Overview */}
+      <section className="mb-8 grid gap-4 sm:grid-cols-3">
+        <OverviewCard
+          icon={BookOpen}
+          label="Active paths"
+          value="4"
+          detail="Currently learning"
+          index={0}
+        />
+
+        <OverviewCard
+          icon={TrendingUp}
+          label="Average progress"
+          value="41%"
+          detail="Across active paths"
+          index={1}
+        />
+
+        <OverviewCard
+          icon={CheckCircle2}
+          label="Completed"
+          value="2"
+          detail="Finished learning paths"
+          index={2}
+        />
+      </section>
+
+      {/* Search */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.05 }}
+        className="mb-10"
+      >
+        <div className="relative w-full max-w-xl">
+          <Search
+            className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
           />
 
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-            {activePaths.map((path, index) => (
-              <LearningCard key={path.title} path={path} index={index} />
-            ))}
-          </div>
-        </section>
-
-        {/* Completed */}
-        <section>
-          <SectionHeader
-            title="Completed"
-            description="Learning paths you have finished."
-            count={`${completedPaths.length} paths`}
+          <Input
+            type="search"
+            placeholder="Search your learning..."
+            aria-label="Search your learning"
+            className="h-11 rounded-xl border bg-muted/20 pl-10 pr-4 shadow-none transition-colors focus-visible:bg-background"
           />
+        </div>
+      </motion.div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {completedPaths.map((path, index) => (
-              <CompletedCard key={path.title} path={path} index={index} />
-            ))}
-          </div>
-        </section>
-      </div>
-    </div>
+      {/* Continue Learning */}
+      <section className="mb-14">
+        <SectionHeader
+          title="Continue learning"
+          description="Pick up where you left off."
+          count={`${activePaths.length} paths`}
+        />
+
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {activePaths.map((path, index) => (
+            <LearningCard key={path.title} path={path} index={index} />
+          ))}
+        </div>
+      </section>
+
+      {/* Completed */}
+      <section>
+        <SectionHeader
+          title="Completed"
+          description="Learning paths you have finished."
+          count={`${completedPaths.length} paths`}
+        />
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {completedPaths.map((path, index) => (
+            <CompletedCard key={path.title} path={path} index={index} />
+          ))}
+        </div>
+      </section>
+    </PageContainer>
   );
 }
 
@@ -205,7 +210,7 @@ function OverviewCard({
       className="rounded-2xl border bg-muted/10 p-5 transition-colors hover:bg-muted/20"
     >
       <div className="flex size-9 items-center justify-center rounded-xl bg-background">
-        <Icon className="size-4" />
+        <Icon className="size-4" aria-hidden="true" />
       </div>
 
       <p className="mt-5 text-xs text-muted-foreground">{label}</p>
@@ -240,6 +245,7 @@ function LearningCard({
         <img
           src={path.thumbnail}
           alt=""
+          loading="lazy"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
         />
 
@@ -253,21 +259,16 @@ function LearningCard({
         {/* Play */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex size-11 scale-90 items-center justify-center rounded-full bg-black/65 text-white opacity-0 shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
-            <Play className="ml-0.5 size-5 fill-current" />
+            <Play className="ml-0.5 size-5 fill-current" aria-hidden="true" />
           </div>
         </div>
 
         {/* Progress */}
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${path.progress}%` }}
-            transition={{
-              duration: 0.7,
-              delay: index * 0.08,
-              ease: "easeOut",
-            }}
-            className="h-full bg-white"
+        <div className="absolute bottom-0 left-0 right-0">
+          <ProgressBar
+            value={path.progress}
+            className="h-1 rounded-none bg-black/30"
+            indicatorClassName="rounded-none bg-white"
           />
         </div>
       </div>
@@ -279,7 +280,10 @@ function LearningCard({
             {path.title}
           </h3>
 
-          <ArrowRight className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-foreground" />
+          <ArrowRight
+            className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-foreground"
+            aria-hidden="true"
+          />
         </div>
 
         <p className="mt-1.5 line-clamp-1 text-xs leading-5 text-muted-foreground">
@@ -288,32 +292,19 @@ function LearningCard({
 
         {/* Progress */}
         <div className="mt-4">
-          <div className="mb-1.5 flex items-center justify-between text-[11px]">
-            <span className="text-muted-foreground">
-              {path.completed} of {path.total} lessons
-            </span>
-
-            <span className="font-medium">{path.progress}%</span>
-          </div>
-
-          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${path.progress}%` }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.08,
-                ease: "easeOut",
-              }}
-              className="h-full rounded-full bg-foreground"
-            />
-          </div>
+          <ProgressBar
+            value={path.progress}
+            showLabel
+            label={`${path.completed} of ${path.total} lessons`}
+            className="h-1.5"
+            indicatorClassName="bg-foreground"
+          />
         </div>
 
         {/* Footer */}
         <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <Clock3 className="size-3.5" />
+            <Clock3 className="size-3.5" aria-hidden="true" />
             {path.timeLeft} left
           </span>
 
@@ -349,6 +340,7 @@ function CompletedCard({
         <img
           src={path.thumbnail}
           alt=""
+          loading="lazy"
           className="h-full w-full object-cover grayscale-15 transition-all duration-500 group-hover:scale-[1.025] group-hover:grayscale-0"
         />
 
@@ -356,7 +348,7 @@ function CompletedCard({
 
         {/* Completed badge */}
         <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-md border border-white/10 bg-black/70 px-2.5 py-1.5 text-[11px] font-medium text-white backdrop-blur-md">
-          <CheckCircle2 className="size-3.5" />
+          <CheckCircle2 className="size-3.5" aria-hidden="true" />
           Completed
         </div>
       </div>
@@ -368,7 +360,10 @@ function CompletedCard({
             {path.title}
           </h3>
 
-          <ArrowRight className="mt-0.5 size-4 shrink-0 text-muted-foreground opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100" />
+          <ArrowRight
+            className="mt-0.5 size-4 shrink-0 text-muted-foreground opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100"
+            aria-hidden="true"
+          />
         </div>
 
         <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-muted-foreground">
@@ -378,31 +373,5 @@ function CompletedCard({
         <p className="mt-3 text-xs text-muted-foreground">{path.completed}</p>
       </div>
     </motion.article>
-  );
-}
-
-function SectionHeader({
-  title,
-  description,
-  count,
-}: {
-  title: string;
-  description: string;
-  count: string;
-}) {
-  return (
-    <div className="mb-6 flex items-end justify-between gap-4">
-      <div>
-        <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-          {title}
-        </h2>
-
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-      </div>
-
-      <span className="hidden shrink-0 text-xs text-muted-foreground sm:block">
-        {count}
-      </span>
-    </div>
   );
 }

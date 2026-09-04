@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Bookmark, BookOpen, MoreHorizontal, Play, Search } from "lucide-react";
 
+import PageContainer from "@/components/shared/page-container";
+import ProgressBar from "@/components/shared/progress-bar";
+import SectionHeader from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -65,101 +68,110 @@ const filters = ["All", "Videos", "Learning Paths"];
 
 export default function BookmarksPage() {
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-375 px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-        {/* Header */}
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-8"
-        >
-          <div className="flex items-start gap-4">
-            <div className="hidden size-11 shrink-0 items-center justify-center rounded-xl border bg-muted/40 sm:flex">
-              <Bookmark className="size-5" />
-            </div>
-
-            <div>
-              <p className="mb-1 text-sm font-medium text-muted-foreground">
-                Saved
-              </p>
-
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                Your bookmarks
-              </h1>
-
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-                Keep the resources you want to come back to while learning.
-              </p>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Controls */}
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="mb-9 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
-        >
-          <div className="relative w-full max-w-xl">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground" />
-
-            <Input
-              placeholder="Search your bookmarks..."
-              className="h-11 rounded-xl bg-muted/20 pl-10 shadow-none"
-            />
+    <PageContainer className="max-w-375">
+      {/* Header */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-8"
+      >
+        <div className="flex items-start gap-4">
+          <div className="hidden size-11 shrink-0 items-center justify-center rounded-xl border bg-muted/40 sm:flex">
+            <Bookmark className="size-5" aria-hidden="true" />
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {filters.map((filter, index) => (
-              <button
-                key={filter}
-                type="button"
-                className={[
-                  "flex h-9 shrink-0 items-center rounded-xl px-3.5 text-sm font-medium transition-colors",
-                  index === 0
-                    ? "bg-foreground text-background"
-                    : "border bg-card text-muted-foreground hover:bg-muted hover:text-foreground",
-                ].join(" ")}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
-        </motion.section>
+          <div className="min-w-0">
+            <p className="mb-1 text-sm font-medium text-muted-foreground">
+              Saved
+            </p>
 
-        {/* Summary */}
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-8 flex items-center justify-between"
-        >
-          <div>
-            <h2 className="text-lg font-semibold tracking-tight">
-              Saved resources
-            </h2>
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              Your bookmarks
+            </h1>
 
-            <p className="mt-1 text-sm text-muted-foreground">
-              {bookmarks.length} resources saved for later.
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+              Keep the resources you want to come back to while learning.
             </p>
           </div>
+        </div>
+      </motion.section>
 
-          <div className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
-            <Bookmark className="size-4" />
-            {bookmarks.length} saved
-          </div>
-        </motion.section>
+      {/* Controls */}
+      <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.05 }}
+        className="mb-9 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div className="relative w-full max-w-xl">
+          <Search
+            className="pointer-events-none absolute left-3.5 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
+          />
 
-        {/* Bookmark grid */}
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {bookmarks.map((item, index) => (
-            <BookmarkCard key={item.title} item={item} index={index} />
+          <Input
+            type="search"
+            placeholder="Search your bookmarks..."
+            aria-label="Search your bookmarks"
+            className="h-11 rounded-xl bg-muted/20 pl-10 shadow-none"
+          />
+        </div>
+
+        <div
+          className="flex gap-2 overflow-x-auto pb-1"
+          role="group"
+          aria-label="Bookmark filters"
+        >
+          {filters.map((filter, index) => (
+            <button
+              key={filter}
+              type="button"
+              aria-pressed={index === 0}
+              className={[
+                "flex h-9 shrink-0 items-center rounded-xl px-3.5 text-sm font-medium transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                index === 0
+                  ? "bg-foreground text-background"
+                  : "border bg-card text-muted-foreground hover:bg-muted hover:text-foreground",
+              ].join(" ")}
+            >
+              {filter}
+            </button>
           ))}
-        </section>
-      </div>
-    </div>
+        </div>
+      </motion.section>
+
+      {/* Summary */}
+      <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="mb-8"
+      >
+        <SectionHeader
+          title="Saved resources"
+          description={`${bookmarks.length} resources saved for later.`}
+          count={`${bookmarks.length} saved`}
+          action={
+            <Bookmark
+              className="size-4 text-muted-foreground sm:hidden"
+              aria-hidden="true"
+            />
+          }
+        />
+      </motion.section>
+
+      {/* Bookmark grid */}
+      <section
+        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+        aria-label="Saved resources"
+      >
+        {bookmarks.map((item, index) => (
+          <BookmarkCard key={item.title} item={item} index={index} />
+        ))}
+      </section>
+    </PageContainer>
   );
 }
 
@@ -186,18 +198,25 @@ function BookmarkCard({
         <img
           src={item.thumbnail}
           alt=""
+          loading="lazy"
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
-        <div className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/20" />
+        <div
+          className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/20"
+          aria-hidden="true"
+        />
 
         {/* Type */}
         <div className="absolute left-3 top-3 rounded-lg border border-white/10 bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md">
           {item.type}
         </div>
 
-        {/* Play */}
-        <div className="absolute bottom-3 left-3 flex size-9 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-md">
+        {/* Media icon */}
+        <div
+          className="absolute bottom-3 left-3 flex size-9 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-md"
+          aria-hidden="true"
+        >
           {item.type === "Video" ? (
             <Play className="ml-0.5 size-4 fill-current" />
           ) : (
@@ -213,7 +232,7 @@ function BookmarkCard({
           className="absolute right-3 top-3 size-9 rounded-lg bg-background/90 shadow-sm backdrop-blur-md hover:bg-background"
           aria-label={`Remove ${item.title} from bookmarks`}
         >
-          <Bookmark className="size-4 fill-current" />
+          <Bookmark className="size-4 fill-current" aria-hidden="true" />
         </Button>
       </div>
 
@@ -235,35 +254,36 @@ function BookmarkCard({
             variant="ghost"
             size="icon"
             className="size-8 shrink-0 rounded-lg"
-            aria-label="More options"
+            aria-label={`More options for ${item.title}`}
           >
-            <MoreHorizontal className="size-4" />
+            <MoreHorizontal className="size-4" aria-hidden="true" />
           </Button>
         </div>
 
+        {/* Progress */}
         <div className="mt-5">
-          <div className="mb-1.5 flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">
-              {item.progress === 100
-                ? "Completed"
-                : `${item.progress}% complete`}
+          <ProgressBar
+            value={item.progress}
+            showLabel
+            label={
+              item.progress === 100 ? "Completed" : `${item.progress}% complete`
+            }
+            className="h-1.5"
+            indicatorClassName="bg-foreground"
+          />
+
+          <div className="mt-1.5 flex justify-end">
+            <span className="text-xs text-muted-foreground">
+              {item.duration}
             </span>
-
-            <span className="text-muted-foreground">{item.duration}</span>
-          </div>
-
-          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full bg-foreground transition-all"
-              style={{ width: `${item.progress}%` }}
-            />
           </div>
         </div>
 
+        {/* Action */}
         <div className="mt-4 border-t pt-4">
           <button
             type="button"
-            className="text-xs font-medium text-foreground transition-opacity hover:opacity-70"
+            className="rounded-md text-xs font-medium text-foreground transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {item.progress === 100 ? "Review resource" : "Continue learning"}
           </button>

@@ -1,9 +1,8 @@
-import { motion } from "framer-motion"
-import {
-    Bookmark,
-    MoreVertical,
-    Play,
-} from "lucide-react"
+import { motion } from "framer-motion";
+import { Bookmark, MoreVertical, Play } from "lucide-react";
+
+import PageContainer from "@/components/shared/page-container";
+import SectionHeader from "@/components/shared/section-header";
 
 const categories = [
   "All",
@@ -15,7 +14,7 @@ const categories = [
   "DevOps",
   "Cyber Security",
   "Interview Prep",
-]
+];
 
 const videos = [
   {
@@ -126,59 +125,62 @@ const videos = [
     thumbnail:
       "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=80",
   },
-]
+];
 
 export default function HomePage() {
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 lg:px-8">
-        {/* Categories */}
-        <div className="sticky top-0 z-10 -mx-4 mb-6 overflow-x-auto bg-background px-4 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div className="flex min-w-max gap-2">
-            {categories.map((category, index) => (
-              <button
-                key={category}
-                type="button"
-                className={[
-                  "h-9 rounded-lg px-4 text-sm font-medium transition-colors",
-                  index === 0
-                    ? "bg-foreground text-background"
-                    : "bg-muted text-foreground hover:bg-muted/70",
-                ].join(" ")}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+    <PageContainer className="max-w-[1600px] py-4 sm:py-5 lg:py-6">
+      {/* Categories */}
+      <div className="sticky top-0 z-10 -mx-4 mb-7 overflow-x-auto bg-background/95 px-4 py-2 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div className="flex min-w-max gap-2">
+          {categories.map((category, index) => (
+            <button
+              key={category}
+              type="button"
+              aria-pressed={index === 0}
+              className={[
+                "h-9 rounded-lg px-4 text-sm font-medium transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                index === 0
+                  ? "bg-foreground text-background"
+                  : "bg-muted text-foreground hover:bg-muted/70",
+              ].join(" ")}
+            >
+              {category}
+            </button>
+          ))}
         </div>
-
-        {/* Video feed */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {videos.map((video, index) => (
-              <VideoCard
-                key={video.title}
-                video={video}
-                index={index}
-              />
-            ))}
-          </div>
-        </motion.section>
       </div>
-    </div>
-  )
+
+      {/* Video feed */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        aria-labelledby="recommended-learning"
+      >
+        <SectionHeader
+          title="Recommended for You"
+          description="Discover videos selected to help you learn and improve your skills."
+          className="mb-6"
+        />
+
+        <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {videos.map((video, index) => (
+            <VideoCard key={video.title} video={video} index={index} />
+          ))}
+        </div>
+      </motion.section>
+    </PageContainer>
+  );
 }
 
 function VideoCard({
   video,
   index,
 }: {
-  video: (typeof videos)[number]
-  index: number
+  video: (typeof videos)[number];
+  index: number;
 }) {
   return (
     <motion.article
@@ -194,7 +196,9 @@ function VideoCard({
       <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
         <img
           src={video.thumbnail}
-          alt=""
+          alt={`${video.title} thumbnail`}
+          loading={index < 4 ? "eager" : "lazy"}
+          decoding="async"
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         />
 
@@ -206,7 +210,7 @@ function VideoCard({
         </span>
 
         {/* Hover play */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
           <div className="flex size-12 items-center justify-center rounded-full bg-black/70 text-white backdrop-blur-sm">
             <Play className="ml-0.5 size-5 fill-current" />
           </div>
@@ -228,16 +232,14 @@ function VideoCard({
 
             <button
               type="button"
-              className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
-              aria-label="More options"
+              className="shrink-0 rounded-md opacity-0 transition-opacity hover:bg-muted focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100"
+              aria-label={`More options for ${video.title}`}
             >
               <MoreVertical className="size-4" />
             </button>
           </div>
 
-          <p className="mt-1 text-xs text-muted-foreground">
-            {video.category}
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{video.category}</p>
 
           <p className="mt-0.5 text-xs text-muted-foreground">
             {video.views} · {video.time}
@@ -246,12 +248,12 @@ function VideoCard({
 
         <button
           type="button"
-          className="hidden shrink-0 self-start text-muted-foreground transition-colors hover:text-foreground"
-          aria-label="Bookmark"
+          className="hidden shrink-0 self-start rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:block"
+          aria-label={`Bookmark ${video.title}`}
         >
           <Bookmark className="size-4" />
         </button>
       </div>
     </motion.article>
-  )
+  );
 }

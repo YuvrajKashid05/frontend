@@ -13,6 +13,9 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import PageContainer from "@/components/shared/page-container";
+import ProgressBar from "@/components/shared/progress-bar";
+import SectionHeader from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
 
 const modules = [
@@ -47,7 +50,11 @@ const modules = [
       "Learn the Python concepts required for practical ML development.",
     progress: 66,
     lessons: [
-      { title: "NumPy Fundamentals", duration: "24 min", completed: true },
+      {
+        title: "NumPy Fundamentals",
+        duration: "24 min",
+        completed: true,
+      },
       {
         title: "Pandas for Data Analysis",
         duration: "28 min",
@@ -68,9 +75,21 @@ const modules = [
     progress: 0,
     locked: true,
     lessons: [
-      { title: "Linear Regression", duration: "32 min", completed: false },
-      { title: "Logistic Regression", duration: "29 min", completed: false },
-      { title: "Decision Trees", duration: "31 min", completed: false },
+      {
+        title: "Linear Regression",
+        duration: "32 min",
+        completed: false,
+      },
+      {
+        title: "Logistic Regression",
+        duration: "29 min",
+        completed: false,
+      },
+      {
+        title: "Decision Trees",
+        duration: "31 min",
+        completed: false,
+      },
     ],
   },
   {
@@ -80,8 +99,16 @@ const modules = [
     progress: 0,
     locked: true,
     lessons: [
-      { title: "K-Means Clustering", duration: "27 min", completed: false },
-      { title: "PCA", duration: "25 min", completed: false },
+      {
+        title: "K-Means Clustering",
+        duration: "27 min",
+        completed: false,
+      },
+      {
+        title: "PCA",
+        duration: "25 min",
+        completed: false,
+      },
       {
         title: "Real-world Applications",
         duration: "20 min",
@@ -95,24 +122,27 @@ export default function LearningPathPage() {
   const [openModule, setOpenModule] = useState(1);
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+    <PageContainer className="max-w-7xl">
       {/* Back */}
       <Link
         to="/my-learning"
-        className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        className="mb-6 inline-flex items-center gap-2 rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
-        <ArrowLeft className="size-4" />
+        <ArrowLeft className="size-4" aria-hidden="true" />
         Back to My Learning
       </Link>
 
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl border bg-card/70 p-6 shadow-sm sm:p-8">
-        <div className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full bg-primary/10 blur-3xl" />
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 size-64 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden="true"
+        />
 
         <div className="relative grid gap-8 lg:grid-cols-[1fr_320px]">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border bg-muted/40 px-3 py-1.5 text-xs font-medium">
-              <Sparkles className="size-3.5" />
+              <Sparkles className="size-3.5" aria-hidden="true" />
               AI Learning Path
             </div>
 
@@ -127,23 +157,23 @@ export default function LearningPathPage() {
 
             <div className="mt-6 flex flex-wrap gap-4 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
-                <BookOpen className="size-4" />4 Modules
+                <BookOpen className="size-4" aria-hidden="true" />4 Modules
               </span>
 
               <span className="inline-flex items-center gap-2">
-                <Clock3 className="size-4" />
+                <Clock3 className="size-4" aria-hidden="true" />
                 12h 40m
               </span>
 
               <span className="inline-flex items-center gap-2">
-                <Trophy className="size-4" />
+                <Trophy className="size-4" aria-hidden="true" />
                 Beginner
               </span>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button className="rounded-xl px-6">
-                <Play className="mr-2 size-4 fill-current" />
+                <Play className="mr-2 size-4 fill-current" aria-hidden="true" />
                 Continue Learning
               </Button>
 
@@ -155,14 +185,12 @@ export default function LearningPathPage() {
 
           {/* Progress */}
           <div className="rounded-2xl border bg-muted/20 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Your Progress</span>
-              <span className="text-2xl font-bold">42%</span>
-            </div>
-
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
-              <div className="h-full w-[42%] rounded-full bg-primary" />
-            </div>
+            <ProgressBar
+              value={42}
+              showLabel
+              label="Your progress"
+              className="h-2"
+            />
 
             <div className="mt-5 grid grid-cols-2 gap-3">
               <div className="rounded-xl border bg-background/50 p-3">
@@ -183,14 +211,10 @@ export default function LearningPathPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_300px]">
         {/* Modules */}
         <section>
-          <div className="mb-5">
-            <h2 className="text-xl font-semibold tracking-tight">
-              Course Content
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Follow the modules in order to build your knowledge step by step.
-            </p>
-          </div>
+          <SectionHeader
+            title="Course Content"
+            description="Follow the modules in order to build your knowledge step by step."
+          />
 
           <div className="space-y-3">
             {modules.map((module) => {
@@ -207,9 +231,18 @@ export default function LearningPathPage() {
                       !module.locked && setOpenModule(isOpen ? 0 : module.id)
                     }
                     disabled={module.locked}
-                    className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-muted/30 disabled:cursor-not-allowed disabled:hover:bg-transparent sm:p-5"
+                    aria-expanded={!module.locked ? isOpen : undefined}
+                    aria-label={
+                      module.locked
+                        ? `${module.title}, locked`
+                        : `${isOpen ? "Collapse" : "Expand"} ${module.title}`
+                    }
+                    className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring disabled:cursor-not-allowed disabled:hover:bg-transparent sm:p-5"
                   >
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-muted/50">
+                    <div
+                      className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-muted/50"
+                      aria-hidden="true"
+                    >
                       {module.locked ? (
                         <Lock className="size-4 text-muted-foreground" />
                       ) : module.progress === 100 ? (
@@ -238,14 +271,14 @@ export default function LearningPathPage() {
 
                       {!module.locked && (
                         <div className="mt-3 flex items-center gap-3">
-                          <div className="h-1.5 max-w-48 flex-1 overflow-hidden rounded-full bg-muted">
-                            <div
-                              className="h-full rounded-full bg-primary"
-                              style={{ width: `${module.progress}%` }}
-                            />
-                          </div>
+                          <ProgressBar
+                            value={module.progress}
+                            className="h-1.5 max-w-48 flex-1"
+                            indicatorClassName="bg-primary"
+                            label={`${module.title} progress`}
+                          />
 
-                          <span className="text-xs text-muted-foreground">
+                          <span className="shrink-0 text-xs text-muted-foreground">
                             {module.progress}%
                           </span>
                         </div>
@@ -257,6 +290,7 @@ export default function LearningPathPage() {
                         className={`size-5 shrink-0 text-muted-foreground transition-transform ${
                           isOpen ? "rotate-180" : ""
                         }`}
+                        aria-hidden="true"
                       />
                     )}
                   </button>
@@ -268,7 +302,7 @@ export default function LearningPathPage() {
                           key={lesson.title}
                           className="flex items-center gap-3 px-4 py-4 sm:px-5"
                         >
-                          <div className="shrink-0">
+                          <div className="shrink-0" aria-hidden="true">
                             {lesson.completed ? (
                               <CheckCircle2 className="size-5 text-primary" />
                             ) : (
@@ -282,13 +316,14 @@ export default function LearningPathPage() {
                             </p>
 
                             <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-                              <Clock3 className="size-3" />
+                              <Clock3 className="size-3" aria-hidden="true" />
                               {lesson.duration}
                             </p>
                           </div>
 
                           {!lesson.completed && index === 2 && (
                             <Button
+                              type="button"
                               size="sm"
                               variant="outline"
                               className="rounded-lg"
@@ -312,11 +347,12 @@ export default function LearningPathPage() {
           <div className="rounded-2xl border bg-card/60 p-5">
             <div className="flex items-center gap-2">
               <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10">
-                <Sparkles className="size-4 text-primary" />
+                <Sparkles className="size-4 text-primary" aria-hidden="true" />
               </div>
 
               <div>
                 <h3 className="text-sm font-semibold">AI Insight</h3>
+
                 <p className="text-xs text-muted-foreground">
                   Based on your progress
                 </p>
@@ -338,6 +374,7 @@ export default function LearningPathPage() {
                 <span className="text-sm text-muted-foreground">
                   Learning time
                 </span>
+
                 <span className="text-sm font-medium">5h 18m</span>
               </div>
 
@@ -345,6 +382,7 @@ export default function LearningPathPage() {
                 <span className="text-sm text-muted-foreground">
                   Lessons completed
                 </span>
+
                 <span className="text-sm font-medium">5 / 12</span>
               </div>
 
@@ -352,6 +390,7 @@ export default function LearningPathPage() {
                 <span className="text-sm text-muted-foreground">
                   Current streak
                 </span>
+
                 <span className="text-sm font-medium">12 days</span>
               </div>
             </div>
@@ -360,7 +399,8 @@ export default function LearningPathPage() {
           {/* Completion */}
           <div className="rounded-2xl border bg-muted/20 p-5">
             <div className="flex items-center gap-2">
-              <Trophy className="size-4" />
+              <Trophy className="size-4" aria-hidden="true" />
+
               <h3 className="text-sm font-semibold">Keep Going</h3>
             </div>
 
@@ -371,6 +411,6 @@ export default function LearningPathPage() {
           </div>
         </aside>
       </div>
-    </div>
+    </PageContainer>
   );
 }

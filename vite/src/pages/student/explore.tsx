@@ -13,6 +13,8 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import PageContainer from "@/components/shared/page-container";
+import SectionHeader from "@/components/shared/section-header";
 import { Input } from "@/components/ui/input";
 
 const categories = [
@@ -71,265 +73,262 @@ const topics = [
 
 export default function ExplorePage() {
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-375 px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-        {/* Header */}
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mb-8"
-        >
-          <div className="max-w-3xl">
-            <p className="mb-2 text-sm font-medium text-muted-foreground">
-              Discover
-            </p>
+    <PageContainer className="max-w-375">
+      {/* Header */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-8"
+      >
+        <div className="max-w-3xl">
+          <p className="mb-2 text-sm font-medium text-muted-foreground">
+            Discover
+          </p>
 
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Explore learning
-            </h1>
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            Explore learning
+          </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-              Find something new to learn and build your next learning path.
-            </p>
-          </div>
-        </motion.section>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+            Find something new to learn and build your next learning path.
+          </p>
+        </div>
+      </motion.section>
 
-        {/* Search */}
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="mb-10"
-        >
-          <div className="relative max-w-3xl">
-            <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+      {/* Search */}
+      <motion.section
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.05 }}
+        className="mb-10"
+      >
+        <div className="relative max-w-3xl">
+          <Search
+            className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
+          />
 
-            <Input
-              placeholder="What do you want to learn?"
-              className="
-                h-14 rounded-2xl border bg-card pl-12 pr-4 text-sm
-                shadow-sm transition-all
-                placeholder:text-muted-foreground/70
-                focus-visible:ring-2
-              "
-            />
-          </div>
-        </motion.section>
-
-        {/* Categories */}
-        <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-11"
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight">
-                Categories
-              </h2>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Browse learning areas.
-              </p>
-            </div>
-          </div>
-
-          <div className="scrollbar-none flex gap-2 overflow-x-auto pb-1">
-            {categories.map((category, index) => {
-              const Icon = category.icon;
-              const active = index === 0;
-
-              return (
-                <motion.button
-                  key={category.name}
-                  type="button"
-                  whileTap={{ scale: 0.97 }}
-                  className={[
-                    "flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-sm font-medium",
-                    "transition-all duration-200",
-                    active
-                      ? "bg-foreground text-background shadow-sm"
-                      : "border bg-card text-muted-foreground hover:border-foreground/20 hover:bg-muted/60 hover:text-foreground",
-                  ].join(" ")}
-                >
-                  <Icon className="size-4" />
-                  {category.name}
-                </motion.button>
-              );
-            })}
-          </div>
-        </motion.section>
-
-        {/* Popular Topics */}
-        <section>
-          <div className="mb-6 flex items-end justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight">
-                Popular topics
-              </h2>
-
-              <p className="mt-1.5 text-sm text-muted-foreground">
-                Start with a topic and create your learning path.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {topics.map((topic, index) => {
-              const Icon = topic.icon;
-
-              return (
-                <motion.button
-                  key={topic.title}
-                  type="button"
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.35,
-                    delay: index * 0.05,
-                  }}
-                  whileHover={{ y: -3 }}
-                  whileTap={{ scale: 0.99 }}
-                  className="group text-left"
-                >
-                  <div
-                    className="
-                      relative h-full overflow-hidden rounded-2xl border
-                      bg-card p-5 shadow-sm transition-all duration-200
-                      hover:border-foreground/15 hover:shadow-md
-                    "
-                  >
-                    {/* Subtle hover glow */}
-                    <div
-                      className="
-                        pointer-events-none absolute -right-16 -top-16
-                        size-32 rounded-full bg-foreground/5 blur-3xl
-                        opacity-0 transition-opacity duration-300
-                        group-hover:opacity-100
-                      "
-                    />
-
-                    <div className="relative">
-                      {/* Top row */}
-                      <div className="mb-7 flex items-start justify-between">
-                        <div
-                          className="
-                            flex size-12 items-center justify-center
-                            rounded-xl border bg-muted/50
-                            transition-colors duration-200
-                            group-hover:bg-muted
-                          "
-                        >
-                          <Icon className="size-5" />
-                        </div>
-
-                        <div
-                          className="
-                            flex size-8 items-center justify-center
-                            rounded-lg text-muted-foreground
-                            transition-all duration-200
-                            group-hover:bg-muted group-hover:text-foreground
-                          "
-                        >
-                          <ArrowRight
-                            className="
-                              size-4 transition-transform duration-200
-                              group-hover:translate-x-0.5
-                            "
-                          />
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <h3 className="text-base font-semibold tracking-tight">
-                        {topic.title}
-                      </h3>
-
-                      <p className="mt-2 min-h-10 text-sm leading-5 text-muted-foreground">
-                        {topic.description}
-                      </p>
-
-                      {/* Footer */}
-                      <div className="mt-6 flex items-center justify-between border-t pt-4">
-                        <span className="text-xs font-medium text-muted-foreground">
-                          {topic.lessons}
-                        </span>
-
-                        <span className="text-xs font-medium text-foreground opacity-0 transition-opacity group-hover:opacity-100">
-                          Explore
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Existing AI CTA — design improved only */}
-        <motion.section
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="mt-11"
-        >
-          <div
+          <Input
+            placeholder="What do you want to learn?"
+            aria-label="Search learning topics"
             className="
-              relative overflow-hidden rounded-2xl border bg-card
-              p-6 shadow-sm sm:p-7
+              h-14 rounded-2xl border bg-card pl-12 pr-4 text-sm
+              shadow-sm transition-all
+              placeholder:text-muted-foreground/70
+              focus-visible:ring-2
             "
-          >
-            {/* Background decoration */}
-            <div
-              className="
-                pointer-events-none absolute -right-20 -top-20
-                size-48 rounded-full bg-foreground/5 blur-3xl
-              "
-            />
+          />
+        </div>
+      </motion.section>
 
-            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start gap-4">
+      {/* Categories */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="mb-11"
+      >
+        <SectionHeader
+          title="Categories"
+          description="Browse learning areas."
+          className="mb-4"
+        />
+
+        <div className="scrollbar-none flex gap-2 overflow-x-auto pb-1">
+          {categories.map((category, index) => {
+            const Icon = category.icon;
+            const active = index === 0;
+
+            return (
+              <motion.button
+                key={category.name}
+                type="button"
+                whileTap={{ scale: 0.97 }}
+                aria-pressed={active}
+                className={[
+                  "flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-sm font-medium",
+                  "transition-all duration-200",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  active
+                    ? "bg-foreground text-background shadow-sm"
+                    : "border bg-card text-muted-foreground hover:border-foreground/20 hover:bg-muted/60 hover:text-foreground",
+                ].join(" ")}
+              >
+                <Icon className="size-4" aria-hidden="true" />
+                {category.name}
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.section>
+
+      {/* Popular Topics */}
+      <section>
+        <SectionHeader
+          title="Popular topics"
+          description="Start with a topic and create your learning path."
+          className="mb-6"
+        />
+
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {topics.map((topic, index) => {
+            const Icon = topic.icon;
+
+            return (
+              <motion.button
+                key={topic.title}
+                type="button"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.35,
+                  delay: index * 0.05,
+                }}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.99 }}
+                className="group text-left focus-visible:outline-none"
+              >
                 <div
                   className="
-                    flex size-11 shrink-0 items-center justify-center
-                    rounded-xl border bg-muted/50
+                    relative h-full overflow-hidden rounded-2xl border
+                    bg-card p-5 shadow-sm transition-all duration-200
+                    hover:border-foreground/15 hover:shadow-md
+                    focus-within:ring-2 focus-within:ring-ring
                   "
                 >
-                  <Sparkles className="size-5" />
+                  {/* Subtle hover glow */}
+                  <div
+                    className="
+                      pointer-events-none absolute -right-16 -top-16
+                      size-32 rounded-full bg-foreground/5 blur-3xl
+                      opacity-0 transition-opacity duration-300
+                      group-hover:opacity-100
+                    "
+                  />
+
+                  <div className="relative">
+                    {/* Top row */}
+                    <div className="mb-7 flex items-start justify-between">
+                      <div
+                        className="
+                          flex size-12 items-center justify-center
+                          rounded-xl border bg-muted/50
+                          transition-colors duration-200
+                          group-hover:bg-muted
+                        "
+                      >
+                        <Icon className="size-5" aria-hidden="true" />
+                      </div>
+
+                      <div
+                        className="
+                          flex size-8 items-center justify-center
+                          rounded-lg text-muted-foreground
+                          transition-all duration-200
+                          group-hover:bg-muted group-hover:text-foreground
+                        "
+                      >
+                        <ArrowRight
+                          className="
+                            size-4 transition-transform duration-200
+                            group-hover:translate-x-0.5
+                          "
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-base font-semibold tracking-tight">
+                      {topic.title}
+                    </h3>
+
+                    <p className="mt-2 min-h-10 text-sm leading-5 text-muted-foreground">
+                      {topic.description}
+                    </p>
+
+                    {/* Footer */}
+                    <div className="mt-6 flex items-center justify-between border-t pt-4">
+                      <span className="text-xs font-medium text-muted-foreground">
+                        {topic.lessons}
+                      </span>
+
+                      <span className="text-xs font-medium text-foreground opacity-0 transition-opacity group-hover:opacity-100">
+                        Explore
+                      </span>
+                    </div>
+                  </div>
                 </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </section>
 
-                <div>
-                  <h2 className="font-semibold tracking-tight">
-                    Know exactly what you want to learn?
-                  </h2>
+      {/* AI CTA */}
+      <motion.section
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="mt-11"
+      >
+        <div
+          className="
+            relative overflow-hidden rounded-2xl border bg-card
+            p-6 shadow-sm sm:p-7
+          "
+        >
+          {/* Background decoration */}
+          <div
+            className="
+              pointer-events-none absolute -right-20 -top-20
+              size-48 rounded-full bg-foreground/5 blur-3xl
+            "
+          />
 
-                  <p className="mt-1.5 max-w-xl text-sm leading-5 text-muted-foreground">
-                    Search for any topic and Learn_ can help you turn it into a
-                    structured learning path.
-                  </p>
-                </div>
-              </div>
-
-              <motion.button
-                type="button"
-                whileHover={{ x: 2 }}
-                whileTap={{ scale: 0.98 }}
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <div
                 className="
-                  flex h-10 shrink-0 items-center justify-center gap-2
-                  rounded-xl bg-foreground px-4 text-sm font-medium
-                  text-background transition-opacity hover:opacity-90
+                  flex size-11 shrink-0 items-center justify-center
+                  rounded-xl border bg-muted/50
                 "
               >
-                Start learning
-                <ArrowRight className="size-4" />
-              </motion.button>
+                <Sparkles className="size-5" aria-hidden="true" />
+              </div>
+
+              <div>
+                <h2 className="font-semibold tracking-tight">
+                  Know exactly what you want to learn?
+                </h2>
+
+                <p className="mt-1.5 max-w-xl text-sm leading-5 text-muted-foreground">
+                  Search for any topic and Learn_ can help you turn it into a
+                  structured learning path.
+                </p>
+              </div>
             </div>
+
+            <motion.button
+              type="button"
+              whileHover={{ x: 2 }}
+              whileTap={{ scale: 0.98 }}
+              className="
+                flex h-10 shrink-0 items-center justify-center gap-2
+                rounded-xl bg-foreground px-4 text-sm font-medium
+                text-background transition-opacity hover:opacity-90
+                focus-visible:outline-none focus-visible:ring-2
+                focus-visible:ring-ring focus-visible:ring-offset-2
+                focus-visible:ring-offset-background
+              "
+            >
+              Start learning
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </motion.button>
           </div>
-        </motion.section>
-      </div>
-    </div>
+        </div>
+      </motion.section>
+    </PageContainer>
   );
 }

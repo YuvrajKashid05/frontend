@@ -10,6 +10,9 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import PageContainer from "@/components/shared/page-container";
+import ProgressBar from "@/components/shared/progress-bar";
+import SectionHeader from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
 
 const goals = [
@@ -66,7 +69,7 @@ const goalStats = [
 export default function LearningGoalsPage() {
   return (
     <div className="w-full">
-      <div className="mx-auto w-full max-w-375 px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+      <PageContainer className="max-w-375">
         {/* Header */}
         <motion.section
           initial={{ opacity: 0, y: 8 }}
@@ -94,7 +97,10 @@ export default function LearningGoalsPage() {
         </motion.section>
 
         {/* Overview */}
-        <section className="mb-10 grid gap-4 sm:grid-cols-3">
+        <section
+          aria-label="Learning goal overview"
+          className="mb-10 grid gap-4 sm:grid-cols-3"
+        >
           {goalStats.map((stat, index) => (
             <OverviewCard
               key={stat.label}
@@ -140,21 +146,11 @@ export default function LearningGoalsPage() {
 
         {/* Goals */}
         <section>
-          <div className="mb-5 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-                Your goals
-              </h2>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Keep working toward the skills you want to master.
-              </p>
-            </div>
-
-            <span className="text-xs text-muted-foreground">
-              3 active goals
-            </span>
-          </div>
+          <SectionHeader
+            title="Your goals"
+            description="Keep working toward the skills you want to master."
+            count="3 active goals"
+          />
 
           <div className="space-y-4">
             {goals.map((goal, index) => (
@@ -188,22 +184,12 @@ export default function LearningGoalsPage() {
             </div>
 
             <div className="w-full lg:max-w-md">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">
-                  8h 36m completed
-                </span>
-
-                <span className="text-xs font-medium">84%</span>
-              </div>
-
-              <div className="h-2 overflow-hidden rounded-full bg-muted">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: "84%" }}
-                  transition={{ duration: 0.8 }}
-                  className="h-full rounded-full bg-foreground"
-                />
-              </div>
+              <ProgressBar
+                value={84}
+                showLabel
+                label="8h 36m completed"
+                indicatorClassName="bg-foreground"
+              />
 
               <p className="mt-2 text-[11px] text-muted-foreground">
                 1h 39m remaining to reach your weekly target.
@@ -243,7 +229,7 @@ export default function LearningGoalsPage() {
             </Button>
           </div>
         </motion.section>
-      </div>
+      </PageContainer>
     </div>
   );
 }
@@ -338,32 +324,12 @@ function GoalCard({
         </div>
 
         {/* Progress */}
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Progress</span>
-
-              <span className="text-[11px] text-muted-foreground">
-                {goal.current}
-              </span>
-            </div>
-
-            <span className="text-sm font-semibold">{goal.progress}%</span>
-          </div>
-
-          <div className="h-2 overflow-hidden rounded-full bg-muted">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${goal.progress}%` }}
-              transition={{
-                duration: 0.7,
-                delay: index * 0.08,
-                ease: "easeOut",
-              }}
-              className="h-full rounded-full bg-foreground"
-            />
-          </div>
-        </div>
+        <ProgressBar
+          value={goal.progress}
+          showLabel
+          label={`Progress — ${goal.current}`}
+          indicatorClassName="bg-foreground"
+        />
 
         {/* Details */}
         <div className="grid grid-cols-2 gap-4 border-t pt-4 sm:grid-cols-3">

@@ -1,8 +1,12 @@
+import type { ReactNode } from "react";
+
 import { motion } from "framer-motion";
 import { CheckCircle2, Clock3, History, Play, Search } from "lucide-react";
 
+import PageContainer from "@/components/shared/page-container";
+import ProgressBar from "@/components/shared/progress-bar";
+import SectionHeader from "@/components/shared/section-header";
 import { Input } from "@/components/ui/input";
-import type { ReactNode } from "react";
 
 const history = [
   {
@@ -72,7 +76,7 @@ const filters = ["All", "In progress", "Completed"];
 export default function HistoryPage() {
   return (
     <div className="w-full">
-      <div className="mx-auto w-full max-w-375 px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+      <PageContainer className="max-w-375">
         {/* Header */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
@@ -115,18 +119,23 @@ export default function HistoryPage() {
 
             <Input
               placeholder="Search your learning history..."
+              aria-label="Search your learning history"
               className="h-11 rounded-xl bg-muted/20 pl-10 shadow-none"
             />
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div
+            className="flex gap-2 overflow-x-auto pb-1"
+            aria-label="History filters"
+          >
             {filters.map((filter, index) => (
               <button
                 key={filter}
                 type="button"
+                aria-pressed={index === 0}
                 className={[
-                  "flex h-9 shrink-0 items-center rounded-xl px-3.5 text-sm font-medium transition-colors",
+                  "flex h-9 shrink-0 items-center rounded-xl px-3.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
                   index === 0
                     ? "bg-foreground text-background"
                     : "border bg-card text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -144,6 +153,7 @@ export default function HistoryPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
           className="mb-8 grid gap-3 sm:grid-cols-3"
+          aria-label="Learning history summary"
         >
           <SummaryCard
             icon={<History className="size-4" />}
@@ -166,15 +176,11 @@ export default function HistoryPage() {
 
         {/* History list */}
         <section>
-          <div className="mb-5">
-            <h2 className="text-lg font-semibold tracking-tight">
-              Recent activity
-            </h2>
-
-            <p className="mt-1 text-sm text-muted-foreground">
-              Your recently opened and completed learning resources.
-            </p>
-          </div>
+          <SectionHeader
+            title="Recent activity"
+            description="Your recently opened and completed learning resources."
+            count={`${history.length} activities`}
+          />
 
           <div className="space-y-3">
             {history.map((item, index) => (
@@ -182,7 +188,7 @@ export default function HistoryPage() {
             ))}
           </div>
         </section>
-      </div>
+      </PageContainer>
     </div>
   );
 }
@@ -226,28 +232,39 @@ function HistoryItem({
         delay: index * 0.04,
       }}
       whileHover={{ y: -1 }}
-      className="group w-full text-left"
+      className="group w-full text-left focus-visible:outline-none"
+      aria-label={`Open ${item.title}`}
     >
-      <div className="rounded-2xl border bg-card p-3 shadow-sm transition-all duration-200 hover:border-foreground/15 hover:shadow-md sm:p-4">
+      <div className="rounded-2xl border bg-card p-3 shadow-sm transition-all duration-200 hover:border-foreground/15 hover:shadow-md focus-within:ring-3 focus-within:ring-ring/50 sm:p-4">
         <div className="flex gap-4">
           {/* Thumbnail */}
           <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-xl bg-muted sm:h-24 sm:w-40">
             <img
               src={item.thumbnail}
               alt=""
+              loading="lazy"
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
 
-            <div className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/20" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/20"
+            />
 
             {!item.completed && (
-              <div className="absolute bottom-2 left-2 flex size-7 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm">
+              <div
+                aria-hidden="true"
+                className="absolute bottom-2 left-2 flex size-7 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm backdrop-blur-sm"
+              >
                 <Play className="ml-0.5 size-3.5 fill-current" />
               </div>
             )}
 
             {item.completed && (
-              <div className="absolute bottom-2 left-2 flex size-7 items-center justify-center rounded-full bg-background/90 shadow-sm backdrop-blur-sm">
+              <div
+                aria-hidden="true"
+                className="absolute bottom-2 left-2 flex size-7 items-center justify-center rounded-full bg-background/90 shadow-sm backdrop-blur-sm"
+              >
                 <CheckCircle2 className="size-4" />
               </div>
             )}
@@ -272,20 +289,21 @@ function HistoryItem({
             </div>
 
             <div className="mt-4">
-              <div className="mb-1.5 flex items-center justify-between text-xs">
+              <div className="mb-1.5 flex items-center justify-between gap-3 text-xs">
                 <span className="text-muted-foreground">
                   {item.completed ? "Completed" : `${item.progress}% complete`}
                 </span>
 
-                <span className="text-muted-foreground">{item.duration}</span>
+                <span className="shrink-0 text-muted-foreground">
+                  {item.duration}
+                </span>
               </div>
 
-              <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-foreground transition-all"
-                  style={{ width: `${item.progress}%` }}
-                />
-              </div>
+              <ProgressBar
+                value={item.progress}
+                label={`${item.title} progress`}
+                indicatorClassName="bg-foreground"
+              />
             </div>
           </div>
         </div>
@@ -296,7 +314,7 @@ function HistoryItem({
             {item.lastStudied}
           </span>
 
-          <span className="flex items-center gap-1 text-xs font-medium opacity-0 transition-opacity group-hover:opacity-100">
+          <span className="flex items-center gap-1 text-xs font-medium opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100">
             Open
             <Play className="size-3" />
           </span>

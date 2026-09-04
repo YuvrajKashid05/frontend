@@ -64,10 +64,13 @@ export default function NotificationsDrawer({
 
           {/* Drawer */}
           <motion.aside
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="notifications-title"
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 24 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="
               fixed right-3 top-3 z-50 flex
               h-[calc(100svh-24px)]
@@ -83,13 +86,24 @@ export default function NotificationsDrawer({
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b px-5 py-4">
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h2 className="font-semibold tracking-tight">
+                  <h2
+                    id="notifications-title"
+                    className="font-semibold tracking-tight"
+                  >
                     Notifications
                   </h2>
 
-                  <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+                  <span
+                    aria-label="2 unread notifications"
+                    className="
+                      flex size-5 items-center justify-center
+                      rounded-full bg-primary
+                      text-[10px] font-semibold
+                      text-primary-foreground
+                    "
+                  >
                     2
                   </span>
                 </div>
@@ -104,15 +118,18 @@ export default function NotificationsDrawer({
                 variant="ghost"
                 size="icon"
                 onClick={onClose}
-                className="size-9 rounded-xl"
+                className="
+                  size-9 shrink-0 rounded-xl
+                  focus-visible:ring-2 focus-visible:ring-ring
+                "
                 aria-label="Close notifications"
               >
-                <X className="size-4" />
+                <X className="size-4" aria-hidden="true" />
               </Button>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between border-b px-5 py-3">
+            <div className="flex items-center justify-between gap-3 border-b px-5 py-3">
               <span className="text-xs text-muted-foreground">
                 2 unread notifications
               </span>
@@ -121,15 +138,21 @@ export default function NotificationsDrawer({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-8 rounded-lg px-2.5 text-xs"
+                className="
+                  h-8 shrink-0 rounded-lg px-2.5 text-xs
+                  focus-visible:ring-2 focus-visible:ring-ring
+                "
               >
-                <CheckCheck className="size-3.5" />
+                <CheckCheck className="size-3.5" aria-hidden="true" />
                 Mark all read
               </Button>
             </div>
 
             {/* Notifications */}
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div
+              className="min-h-0 flex-1 overflow-y-auto"
+              aria-label="Notification list"
+            >
               {notifications.map((notification) => {
                 const Icon = notification.icon;
 
@@ -142,8 +165,14 @@ export default function NotificationsDrawer({
                       px-5 py-4 text-left
                       transition-colors
                       hover:bg-muted/50
-                      ${notification.unread ? "bg-muted/20" : ""}
+                      focus-visible:bg-muted/50
+                      focus-visible:outline-none
+                      focus-visible:ring-2
+                      focus-visible:ring-inset
+                      focus-visible:ring-ring
+                      ${notification.unread ? "bg-muted/20" : "bg-background"}
                     `}
+                    aria-label={`${notification.title}: ${notification.description}`}
                   >
                     {/* Icon */}
                     <span
@@ -151,10 +180,14 @@ export default function NotificationsDrawer({
                         flex size-10 shrink-0 items-center
                         justify-center rounded-xl border
                         bg-muted/40
-                        ${notification.unread ? "border-primary/20" : ""}
+                        ${
+                          notification.unread
+                            ? "border-primary/20"
+                            : "border-border"
+                        }
                       `}
                     >
-                      <Icon className="size-4" />
+                      <Icon className="size-4" aria-hidden="true" />
                     </span>
 
                     {/* Content */}
@@ -165,7 +198,10 @@ export default function NotificationsDrawer({
                         </span>
 
                         {notification.unread && (
-                          <span className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
+                          <span
+                            className="mt-1 size-2 shrink-0 rounded-full bg-primary"
+                            aria-label="Unread"
+                          />
                         )}
                       </span>
 
@@ -187,9 +223,12 @@ export default function NotificationsDrawer({
               <Button
                 type="button"
                 variant="outline"
-                className="w-full rounded-xl"
+                className="
+                  w-full rounded-xl
+                  focus-visible:ring-2 focus-visible:ring-ring
+                "
               >
-                <Check className="size-4" />
+                <Check className="size-4" aria-hidden="true" />
                 View all notifications
               </Button>
             </div>

@@ -3,12 +3,23 @@ import { Check, CheckCheck, Clock3, PlayCircle, Trophy, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
+type NotificationIcon = typeof PlayCircle;
+
+type Notification = {
+  id: number;
+  icon: NotificationIcon;
+  title: string;
+  description: string;
+  time: string;
+  unread: boolean;
+};
+
 type NotificationsDrawerProps = {
   open: boolean;
   onClose: () => void;
 };
 
-const notifications = [
+const notifications: Notification[] = [
   {
     id: 1,
     icon: PlayCircle,
@@ -47,6 +58,10 @@ export default function NotificationsDrawer({
   open,
   onClose,
 }: NotificationsDrawerProps) {
+  const unreadCount = notifications.filter(
+    (notification) => notification.unread,
+  ).length;
+
   return (
     <AnimatePresence>
       {open && (
@@ -55,19 +70,25 @@ export default function NotificationsDrawer({
           <motion.button
             type="button"
             aria-label="Close notifications"
+            aria-controls="notifications-drawer"
             className="fixed inset-0 z-40 cursor-default bg-black/20 backdrop-blur-[2px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             onClick={onClose}
           />
 
           {/* Drawer */}
           <motion.aside
+            id="notifications-drawer"
+            aria-label="Notifications"
+            role="dialog"
+            aria-modal="true"
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 24 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="
               fixed right-3 top-3 z-50 flex
               h-[calc(100svh-24px)]
@@ -89,9 +110,14 @@ export default function NotificationsDrawer({
                     Notifications
                   </h2>
 
-                  <span className="flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-                    2
-                  </span>
+                  {unreadCount > 0 && (
+                    <span
+                      aria-label={`${unreadCount} unread notifications`}
+                      className="flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground"
+                    >
+                      {unreadCount}
+                    </span>
+                  )}
                 </div>
 
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -104,26 +130,31 @@ export default function NotificationsDrawer({
                 variant="ghost"
                 size="icon"
                 onClick={onClose}
-                className="size-9 rounded-xl"
+                className="size-9 rounded-xl focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Close notifications"
               >
-                <X className="size-4" />
+                <X className="size-4" aria-hidden="true" />
               </Button>
             </div>
 
             {/* Actions */}
             <div className="flex items-center justify-between border-b px-5 py-3">
               <span className="text-xs text-muted-foreground">
-                2 unread notifications
+                {unreadCount === 0
+                  ? "You're all caught up"
+                  : `${unreadCount} unread notification${
+                      unreadCount === 1 ? "" : "s"
+                    }`}
               </span>
 
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-8 rounded-lg px-2.5 text-xs"
+                className="h-8 rounded-lg px-2.5 text-xs focus-visible:ring-2 focus-visible:ring-ring"
+                disabled={unreadCount === 0}
               >
-                <CheckCheck className="size-3.5" />
+                <CheckCheck className="size-3.5" aria-hidden="true" />
                 Mark all read
               </Button>
             </div>
@@ -137,24 +168,22 @@ export default function NotificationsDrawer({
                   <button
                     key={notification.id}
                     type="button"
-                    className={`
-                      group flex w-full gap-3 border-b
-                      px-5 py-4 text-left
-                      transition-colors
-                      hover:bg-muted/50
-                      ${notification.unread ? "bg-muted/20" : ""}
-                    `}
+                    aria-label={`${notification.title}. ${notification.description}`}
+                    className={[
+                      "group flex w-full gap-3 border-b px-5 py-4 text-left",
+                      "transition-colors focus-visible:bg-muted/60 focus-visible:outline-none",
+                      "hover:bg-muted/50",
+                      notification.unread ? "bg-muted/20" : "",
+                    ].join(" ")}
                   >
                     {/* Icon */}
                     <span
-                      className={`
-                        flex size-10 shrink-0 items-center
-                        justify-center rounded-xl border
-                        bg-muted/40
-                        ${notification.unread ? "border-primary/20" : ""}
-                      `}
+                      className={[
+                        "flex size-10 shrink-0 items-center justify-center rounded-xl border bg-muted/40",
+                        notification.unread ? "border-primary/20" : "",
+                      ].join(" ")}
                     >
-                      <Icon className="size-4" />
+                      <Icon className="size-4" aria-hidden="true" />
                     </span>
 
                     {/* Content */}
@@ -165,7 +194,10 @@ export default function NotificationsDrawer({
                         </span>
 
                         {notification.unread && (
-                          <span className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
+                          <span
+                            className="mt-1 size-2 shrink-0 rounded-full bg-primary"
+                            aria-label="Unread"
+                          />
                         )}
                       </span>
 
@@ -187,9 +219,9 @@ export default function NotificationsDrawer({
               <Button
                 type="button"
                 variant="outline"
-                className="w-full rounded-xl"
+                className="w-full rounded-xl focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <Check className="size-4" />
+                <Check className="size-4" aria-hidden="true" />
                 View all notifications
               </Button>
             </div>

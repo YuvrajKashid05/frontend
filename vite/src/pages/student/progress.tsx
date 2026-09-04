@@ -9,6 +9,10 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import PageContainer from "@/components/shared/page-container";
+import ProgressBar from "@/components/shared/progress-bar";
+import SectionHeader from "@/components/shared/section-header";
+
 const weeklyActivity = [
   { day: "Mon", hours: 1.2 },
   { day: "Tue", hours: 0.8 },
@@ -75,7 +79,7 @@ export default function ProgressPage() {
 
   return (
     <div className="w-full">
-      <div className="mx-auto w-full max-w-375 px-5 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+      <PageContainer className="max-w-375">
         {/* Header */}
         <motion.section
           initial={{ opacity: 0, y: 8 }}
@@ -96,7 +100,7 @@ export default function ProgressPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 rounded-xl border bg-muted/20 px-3 py-2">
+            <div className="flex w-fit items-center gap-2 rounded-xl border bg-muted/20 px-3 py-2">
               <TrendingUp className="size-4" />
 
               <span className="text-sm font-medium">+12% this week</span>
@@ -105,7 +109,10 @@ export default function ProgressPage() {
         </motion.section>
 
         {/* Stats */}
-        <section className="mb-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <section
+          aria-label="Learning progress statistics"
+          className="mb-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        >
           <StatCard
             icon={Clock3}
             label="Learning time"
@@ -147,10 +154,14 @@ export default function ProgressPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
             className="rounded-2xl border bg-muted/10 p-5 sm:p-6"
+            aria-labelledby="weekly-activity-title"
           >
             <div className="mb-8 flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-lg font-semibold tracking-tight">
+                <h2
+                  id="weekly-activity-title"
+                  className="text-lg font-semibold tracking-tight"
+                >
                   Weekly activity
                 </h2>
 
@@ -169,8 +180,17 @@ export default function ProgressPage() {
             </div>
 
             {/* Chart */}
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-col justify-between">
+            <div
+              className="relative"
+              role="img"
+              aria-label={`Weekly learning activity. Total ${totalHours.toFixed(
+                1,
+              )} hours, with Saturday being the highest at ${maxHours} hours.`}
+            >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 flex flex-col justify-between"
+              >
                 <div className="h-px w-full bg-border/50" />
                 <div className="mt-13 h-px w-full bg-border/30" />
                 <div className="mt-13 h-px w-full bg-border/30" />
@@ -196,6 +216,7 @@ export default function ProgressPage() {
                             ease: "easeOut",
                           }}
                           className="group relative w-full max-w-9 cursor-default rounded-t-lg bg-foreground/80 transition-opacity hover:opacity-80"
+                          aria-hidden="true"
                         >
                           <div className="absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-md border bg-background px-2 py-1 text-[10px] font-medium shadow-sm group-hover:block">
                             {item.hours}h
@@ -233,8 +254,12 @@ export default function ProgressPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.15 }}
             className="rounded-2xl border bg-muted/10 p-5 sm:p-6"
+            aria-labelledby="learning-summary-title"
           >
-            <h2 className="text-lg font-semibold tracking-tight">
+            <h2
+              id="learning-summary-title"
+              className="text-lg font-semibold tracking-tight"
+            >
               Learning summary
             </h2>
 
@@ -244,13 +269,9 @@ export default function ProgressPage() {
 
             <div className="mt-7 space-y-5">
               <SummaryRow label="This week" value="8h 36m" />
-
               <SummaryRow label="This month" value="31h 18m" />
-
               <SummaryRow label="Total learning time" value="126h 42m" />
-
               <SummaryRow label="Lessons completed" value="44" />
-
               <SummaryRow label="Learning paths" value="4 active" />
             </div>
 
@@ -277,21 +298,11 @@ export default function ProgressPage() {
 
         {/* Learning Path Progress */}
         <section className="mt-10">
-          <div className="mb-5 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-                Learning path progress
-              </h2>
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Track how much of each learning path you have completed.
-              </p>
-            </div>
-
-            <span className="text-xs text-muted-foreground">
-              4 active paths
-            </span>
-          </div>
+          <SectionHeader
+            title="Learning path progress"
+            description="Track how much of each learning path you have completed."
+            count="4 active paths"
+          />
 
           <div className="grid gap-4 lg:grid-cols-2">
             {learningProgress.map((path, index) => (
@@ -328,21 +339,14 @@ export default function ProgressPage() {
                 </div>
 
                 <div className="mt-5">
-                  <div className="h-2 overflow-hidden rounded-full bg-muted">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${path.progress}%` }}
-                      transition={{
-                        duration: 0.8,
-                        delay: index * 0.08,
-                        ease: "easeOut",
-                      }}
-                      className="h-full rounded-full bg-foreground"
-                    />
-                  </div>
+                  <ProgressBar
+                    value={path.progress}
+                    label={`${path.title} progress`}
+                    indicatorClassName="bg-foreground"
+                  />
                 </div>
 
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between gap-4">
                   <span className="text-xs text-muted-foreground">
                     {path.time} learning time
                   </span>
@@ -362,15 +366,10 @@ export default function ProgressPage() {
 
         {/* Achievements */}
         <section className="mt-10">
-          <div className="mb-5">
-            <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-              Recent achievements
-            </h2>
-
-            <p className="mt-1 text-sm text-muted-foreground">
-              Small milestones from your learning journey.
-            </p>
-          </div>
+          <SectionHeader
+            title="Recent achievements"
+            description="Small milestones from your learning journey."
+          />
 
           <div className="grid gap-4 md:grid-cols-3">
             {achievements.map((achievement, index) => {
@@ -436,7 +435,7 @@ export default function ProgressPage() {
             </div>
           </div>
         </motion.section>
-      </div>
+      </PageContainer>
     </div>
   );
 }
